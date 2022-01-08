@@ -55,7 +55,7 @@ class Calibrator:
               mtx1, dist1, mtx2, dist2, self.imgSize, 
               flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_FIX_FOCAL_LENGTH+cv.CALIB_ZERO_TANGENT_DIST)
 
-    def SaveDatas(self, filename='./calib/calib_data.json'):
+    def SaveCalibrationDatas(self, filename='./calib/calib_data.json'):
         jsonfile_calib = json.dumps(
             {
                 "K1" : self.K1.tolist(),
