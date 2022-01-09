@@ -1,4 +1,8 @@
 import StereoModule.Calibration as SC
 import StereoModule.StereoMatcher as SSM
 
-# TODO : 전체 프로그램 합치기
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
