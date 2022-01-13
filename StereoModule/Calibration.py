@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 import json
 import glob
+import os
 
 class Calibrator:
 
@@ -18,6 +19,7 @@ class Calibrator:
         self.T  = None
         self.E  = None
         self.F  = None
+        self.isCalibrated = False
 
     def LoadDatas(self, path='./datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
@@ -53,9 +55,13 @@ class Calibrator:
         self.E, self.F = cv.stereoCalibrate(
              self.objDatas, self.leftDatas, self.rightDatas,
               mtx1, dist1, mtx2, dist2, self.imgSize, 
-              flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_FIX_FOCAL_LENGTH+cv.CALIB_ZERO_TANGENT_DIST)
+              flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_FIX_FOCAL_LENGTH)
+        self.isCalibrated = True
 
-    def SaveCalibrationDatas(self, filename='./calib/calib_data.json'):
+    def SaveCalibrationDatas(self, directory='./calib'):
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
+        filename = 'calib_data.json'
         jsonfile_calib = json.dumps(
             {
                 "K1" : self.K1.tolist(),
@@ -69,5 +75,27 @@ class Calibrator:
                 "imgSize" : self.imgSize 
             }
         )
-        with open(filename, 'w') as f:
+        with open(directory+'/'+filename, 'w') as f:
             f.write(jsonfile_calib)
+    
+    def LoadCalibrationDatas(self, filename='./calib/calib_data.json'):
+        with open(filename,'r') as f:
+            fstr = f.read()
+        f.close()
+        jstr = json.loads(fstr)
+        self.K1 = np.array(jstr["K1"])
+        self.K2 = np.array(jstr["K2"])
+        self.D1 = np.array(jstr["D1"])
+        self.D2 = np.array(jstr["D2"])
+        self.R = np.array(jstr["R"])
+        self.T = np.array(jstr["T"])
+        self.isCalibrated = True
+
+def main():
+    calibrator = Calibrator((640,480))
+    calibrator.LoadDatas('./datas')
+    calibrator.RunCalibration()
+    calibrator.SaveCalibrationDatas('./calib')
+
+if __name__ == "__main__":
+    main()

@@ -6,20 +6,25 @@ STEREO_TYPE_SGBM = int(1)
 
 class StereoMatcher:
     
-    def __init__(self, stereoType, **kwargs):
+    def __init__(self, stereoType,numDisparities, blockSize):
         if stereoType == STEREO_TYPE_BM:
-            self.leftMatcher = cv.StereoBM_create(kwargs)
+            self.leftMatcher = cv.StereoBM_create(numDisparities=numDisparities, blockSize=blockSize)
         elif stereoType == STEREO_TYPE_SGBM:
-            self.leftMatcher = cv.StereoSGBM_create(kwargs)
+            self.leftMatcher = cv.StereoSGBM_create(numDisparities=numDisparities, blockSize=blockSize)
         else:
-            self.leftMatcher = cv.StereoBM_create(kwargs)
-        self.rightMatcher = cv.ximgproc.createRightMatcher(self.leftMatcher)
-        self.wlsFilter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.leftMatcher)
+            self.leftMatcher = cv.StereoBM_create(numDisparities=numDisparities, blockSize=blockSize)
+        self.rightMatcher = None
+        self.wlsFilter = None
+        
         
     def GetDisparity(self, rectifiedLeft, rectifiedRight):
         disparity = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
         res = disparity.astype(np.float32) / 16.0
         return res
+
+    def CreateWlsFilter(self):
+        self.rightMatcher = cv.ximgproc.createRightMatcher(self.leftMatcher)
+        self.wlsFilter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.leftMatcher)
 
     def SetWlsFilterParameters(self, lmbda, sigma):
         self.wlsFilter.setLambda(lmbda)

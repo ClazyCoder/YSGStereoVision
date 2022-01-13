@@ -23,3 +23,11 @@ class StereoCamera:
         ret_left, frame_left = self.leftCamera.retrieve()
         ret_right, frame_right = self.rightCamera.retrieve()
         return (frame_left, frame_right)
+        
+    def GetFrameWithRet(self):
+        if not (self.leftCamera.grab()and self.rightCamera.grab()):
+            print("No more frames")
+            return None
+        ret_left, frame_left = self.leftCamera.retrieve()
+        ret_right, frame_right = self.rightCamera.retrieve()
+        return (ret_left, frame_left, ret_right, frame_right)
