@@ -31,8 +31,8 @@ def main():
         grayLeft = cv.cvtColor(leftImg, cv.COLOR_BGR2GRAY)
         grayRight = cv.cvtColor(rightImg,cv.COLOR_BGR2GRAY)
         if isCalibrating:
-            retLeftCorner, corners_left = cv.findChessboardCorners(grayLeft, (9,7), None)
-            retRightCorner, corners_right = cv.findChessboardCorners(grayRight, (9,7), None)
+            retLeftCorner, corners_left = cv.findChessboardCorners(grayLeft, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
+            retRightCorner, corners_right = cv.findChessboardCorners(grayRight, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
             if retLeftCorner and retRightCorner:
                 objpoints.append(objp)
                 corners_left2 = cv.cornerSubPix(grayLeft,corners_left, (11,11), (-1,-1), criteria)
