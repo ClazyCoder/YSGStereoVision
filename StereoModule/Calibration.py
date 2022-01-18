@@ -55,7 +55,7 @@ class Calibrator:
         self.E, self.F = cv.stereoCalibrate(
              self.objDatas, self.leftDatas, self.rightDatas,
               mtx1, dist1, mtx2, dist2, self.imgSize, 
-              flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_FIX_FOCAL_LENGTH+cv.CALIB_ZERO_TANGENT_DIST)
+              flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_SAME_FOCAL_LENGTH)
         self.isCalibrated = True
 
     def SaveCalibrationDatas(self, directory='./calib'):
