@@ -7,7 +7,7 @@ import os
 class Calibrator:
 
     def __init__(self, imgSize):
-        self.imgSize = imgSize
+        self.imgSize = imgSize[::-1]
         self.objDatas = []
         self.leftDatas = []
         self.rightDatas = []
@@ -52,11 +52,23 @@ class Calibrator:
         ret, self.K1, self.D1,  \
         self.K2, self.D2,       \
         self.R, self.T,         \
-        self.E, self.F = cv.stereoCalibrate(
+        self.E, self.F= cv.stereoCalibrate(
              self.objDatas, self.leftDatas, self.rightDatas,
-              mtx1, dist1, mtx2, dist2, self.imgSize, 
-              flags=cv.CALIB_USE_INTRINSIC_GUESS+cv.CALIB_SAME_FOCAL_LENGTH)
+              mtx1, dist1, mtx2, dist2, self.imgSize,
+              flags=cv.CALIB_FIX_INTRINSIC)
         self.isCalibrated = True
+        mean_error = 0
+        for i in range(len(self.objDatas)):
+            imgpoints_left, _ = cv.projectPoints(self.objDatas[i], rvecs1[i], tvecs1[i], mtx1, dist1)
+            error = cv.norm(self.leftDatas[i], imgpoints_left, cv.NORM_L2)/len(imgpoints_left)
+            mean_error += error
+        print( "total error for left: {}".format(mean_error/len(self.objDatas)) )
+        mean_error = 0
+        for i in range(len(self.objDatas)):
+            imgpoints_right, _ = cv.projectPoints(self.objDatas[i], rvecs2[i], tvecs2[i], mtx2, dist2)
+            error = cv.norm(self.rightDatas[i], imgpoints_right, cv.NORM_L2)/len(imgpoints_right)
+            mean_error += error
+        print( "total error for right: {}".format(mean_error/len(self.objDatas)) )
 
     def SaveCalibrationDatas(self, directory='./calib'):
         if not os.path.isdir(directory):
@@ -72,7 +84,7 @@ class Calibrator:
                 "T" : self.T.tolist(),
                 "E" : self.E.tolist(),
                 "F" : self.F.tolist(),
-                "imgSize" : self.imgSize 
+                "imgSize" : self.imgSize[::-1] 
             }
         )
         with open(directory+'/'+filename, 'w') as f:

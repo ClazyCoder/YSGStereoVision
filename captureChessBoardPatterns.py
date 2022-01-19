@@ -79,6 +79,5 @@ def main():
         elif k == 99: # C
             isCalibrating = not isCalibrating
         
-
 if __name__ == "__main__":
     main()
