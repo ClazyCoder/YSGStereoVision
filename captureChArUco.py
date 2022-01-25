@@ -19,18 +19,27 @@ def main():
         print('Chessboard has created.')
         cv.imwrite("./chessboard.tiff", imboard)
     stereoCam = CM.StereoCamera(IMGSIZE)
-    allCorners = []
+    allCornersLeft = []
+    allCornersRight = []
     allIds = []
-    frame = stereoCam.GetFrame()
-    gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-    corners, ids, rejectedImgPoints = cv.aruco.detectMarkers(gray, aruco_dict)
-    if(len(corners) > 0):
-        for corner in corners:
-            cv.cornerSubPix(gray, corner, (3,3), (-1,-1),criteria)
-            ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(corners,ids,gray,board)
-            if charucoCorners is not None and charucoIds is not None and len(charucoCorners) > 3:
-                allCorners.append(charucoCorners)
+    leftFrame, rightFrame = stereoCam.GetFrame()
+    grayLeft = cv.cvtColor(leftFrame, cv.COLOR_BGR2GRAY)
+    grayRight = cv.cvtColor(rightFrame, cv.COLOR_BGR2GRAY)
+
+    cornersLeft, idsLeft, rejectedImgPointsLeft = cv.aruco.detectMarkers(grayLeft, aruco_dict)
+    cornersRight, idsRight, rejectedImgPointsRight = cv.aruco.detectMarkers(grayRight, aruco_dict)
+    if(len(cornersLeft) > 0 and len(cornersRight) > 0):
+        for corner in cornersLeft:
+            cv.cornerSubPix(grayLeft, corner, (3,3), (-1,-1),criteria)
+            ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(cornersLeft,idsLeft,grayLeft,board)
+            if ret:
+                allCornersLeft.append(charucoCorners)
                 allIds.append(charucoIds)
+        for corner in cornersRight:
+            cv.cornerSubPix(grayRight,corner, (3,3),(-1,-1),criteria)
+            ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(cornersRight,idsRight,grayRight,board)
+            if ret:
+                allCornersRight.append(charucoCorners)
     # TODO : 검출된 charuco와 Id값 저장하기
 
 if __name__ == "__main__":
