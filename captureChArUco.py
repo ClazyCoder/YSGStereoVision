@@ -3,6 +3,8 @@ import numpy as np
 from cv2 import aruco
 import CameraModule.CameraModule as CM
 import os
+import datetime
+import json
 
 IMGSIZE = (640,480)
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 100, 0.00001)
@@ -48,7 +50,37 @@ def main():
                 for idx in idsLeft:
                     objpoints.append(newChessboardCorners[idx])
                 objpoints = np.asarray(objpoints)
-            # TODO : 검출된 charuco와 Id값 저장하기
+
+                img_left = leftFrame.copy()
+                img_right = rightFrame.copy()
+                # TODO : 검출된 코너를 ChArUco 보드 위에 그리기
+                today = datetime.datetime.today()
+                filename_left = './ChAruco_captures/capture_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".jpg"
+                jsonfilename_left = './ChAruco_datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".json"
+                jsonfile_left = json.dumps(
+                    {
+                        "objp" : objpoints.tolist(),
+                        "imgp" : allCornersLeft.tolist()
+                    }
+                )
+                with open(jsonfilename_left, 'w') as f:
+                    f.write(jsonfile_left)
+                filename_right = './ChAruco_captures/capture_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".jpg"
+                jsonfilename_right = './ChAruco_datas/data_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".json"
+                jsonfile_right = json.dumps(
+                    {
+                        "objp" : objpoints.tolist(),
+                        "imgp" : allCornersRight.tolist()
+                    }
+                )
+                with open(jsonfilename_right, 'w') as f:
+                    f.write(jsonfile_right)
+                cv.imwrite(filename_left, img_left)
+                cv.imwrite(filename_right, img_right)
+                cv.imshow('left', img_left)
+                cv.imshow('right', img_right)
+                cv.waitKey(3000)
+            isCalibrating = False
         k = cv.waitKey(1)
         if k == 27:
             break
