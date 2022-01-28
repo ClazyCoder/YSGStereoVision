@@ -30,6 +30,8 @@ def main():
         leftFrame, rightFrame = stereoCam.GetFrame()
         grayLeft = cv.cvtColor(leftFrame, cv.COLOR_BGR2GRAY)
         grayRight = cv.cvtColor(rightFrame, cv.COLOR_BGR2GRAY)
+        img_left = leftFrame.copy()
+        img_right = rightFrame.copy()
         if isCalibrating:
             cornersLeft, idsLeft, rejectedImgPointsLeft = cv.aruco.detectMarkers(grayLeft, aruco_dict)
             cornersRight, idsRight, rejectedImgPointsRight = cv.aruco.detectMarkers(grayRight, aruco_dict)
@@ -40,20 +42,19 @@ def main():
                     if ret:
                         allCornersLeft.append(charucoCorners)
                         allIds.append(charucoIds)
+                        cv.aruco.drawDetectedCornersCharuco(img_left, charucoCorners, charucoIds)
                 for corner in cornersRight:
                     cv.cornerSubPix(grayRight,corner, (3,3),(-1,-1),criteria)
                     ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(cornersRight,idsRight,grayRight,board)
                     if ret:
                         allCornersRight.append(charucoCorners)
+                        cv.aruco.drawDetectedCornersCharuco(img_right, charucoCorners, charucoIds)
                 newChessboardCorners = board.chessboardCorners
                 newChessboardCorners[:,1] = (7*1) - newChessboardCorners[:,1]
                 for idx in idsLeft:
                     objpoints.append(newChessboardCorners[idx])
                 objpoints = np.asarray(objpoints)
-
-                img_left = leftFrame.copy()
-                img_right = rightFrame.copy()
-                # TODO : 검출된 코너를 ChArUco 보드 위에 그리기
+                
                 today = datetime.datetime.today()
                 filename_left = './ChAruco_captures/capture_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".jpg"
                 jsonfilename_left = './ChAruco_datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".json"
