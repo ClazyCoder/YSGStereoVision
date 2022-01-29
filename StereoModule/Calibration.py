@@ -35,7 +35,6 @@ class Calibrator:
             objPoints, imgPoints = np.array(objPoints, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
             self.objDatas.append(objPoints)
             self.leftDatas.append(imgPoints)
-
         for data in rightdata_glob:
             with open(data,'r') as f:
                 fstr = f.read()
@@ -44,6 +43,10 @@ class Calibrator:
             imgPoints = jstr['imgp']
             imgPoints = np.array(imgPoints, dtype=np.float32)
             self.rightDatas.append(imgPoints)
+
+    def LoadChArUcoDatas(self, path='./ChAruco_datas'):
+        # TODO : ChArUcoData 불러오기
+        pass
 
     def RunCalibration(self):
         _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.objDatas, self.leftDatas, self.imgSize, None, None)
@@ -69,6 +72,9 @@ class Calibrator:
             error = cv.norm(self.rightDatas[i], imgpoints_right, cv.NORM_L2)/len(imgpoints_right)
             mean_error += error
         print( "total error for right: {}".format(mean_error/len(self.objDatas)) )
+    def RunCalibrationWithChArUco(self):
+        # TODO : ChArUco 데이터로 캘리브레이션 수행
+        pass
 
     def SaveCalibrationDatas(self, directory='./calib'):
         if not os.path.isdir(directory):
