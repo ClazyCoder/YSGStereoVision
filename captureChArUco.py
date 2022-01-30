@@ -23,7 +23,8 @@ def main():
     stereoCam = CM.StereoCamera(IMGSIZE)
     allCornersLeft = []
     allCornersRight = []
-    allIds = []
+    allIdsLeft = []
+    allIdsRight = []
     objpoints= []
     isCalibrating = False
     while True:
@@ -41,13 +42,14 @@ def main():
                     ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(cornersLeft,idsLeft,grayLeft,board)
                     if ret:
                         allCornersLeft.append(charucoCorners)
-                        allIds.append(charucoIds)
+                        allIdsLeft.append(charucoIds)
                         cv.aruco.drawDetectedCornersCharuco(img_left, charucoCorners, charucoIds)
                 for corner in cornersRight:
                     cv.cornerSubPix(grayRight,corner, (3,3),(-1,-1),criteria)
                     ret, charucoCorners, charucoIds = cv.aruco.interpolateCornersCharuco(cornersRight,idsRight,grayRight,board)
                     if ret:
                         allCornersRight.append(charucoCorners)
+                        allIdsRight.append(charucoIds)
                         cv.aruco.drawDetectedCornersCharuco(img_right, charucoCorners, charucoIds)
                 newChessboardCorners = board.chessboardCorners
                 newChessboardCorners[:,1] = (7*1) - newChessboardCorners[:,1]
@@ -61,7 +63,8 @@ def main():
                 jsonfile_left = json.dumps(
                     {
                         "objp" : objpoints.tolist(),
-                        "imgp" : allCornersLeft.tolist()
+                        "imgp" : allCornersLeft.tolist(),
+                        "ids" : allIdsLeft.tolist()
                     }
                 )
                 with open(jsonfilename_left, 'w') as f:
@@ -71,7 +74,8 @@ def main():
                 jsonfile_right = json.dumps(
                     {
                         "objp" : objpoints.tolist(),
-                        "imgp" : allCornersRight.tolist()
+                        "imgp" : allCornersRight.tolist(),
+                        "ids" : allIdsRight.tolist()
                     }
                 )
                 with open(jsonfilename_right, 'w') as f:
