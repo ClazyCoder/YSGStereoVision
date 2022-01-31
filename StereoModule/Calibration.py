@@ -11,6 +11,10 @@ class Calibrator:
         self.objDatas = []
         self.leftDatas = []
         self.rightDatas = []
+        self.leftChDatas = []
+        self.rightChDatas = []
+        self.leftChIds = []
+        self.rightChIds = []
         self.K1 = None
         self.K2 = None
         self.D1 = None
@@ -23,7 +27,7 @@ class Calibrator:
 
     def LoadDatas(self, path='./datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
-        rightdata_glob = glob.glob(path+'/data_left*.json')
+        rightdata_glob = glob.glob(path+'/data_right*.json')
 
         for data in leftdata_glob:
             with open(data,'r') as f:
@@ -45,8 +49,29 @@ class Calibrator:
             self.rightDatas.append(imgPoints)
 
     def LoadChArUcoDatas(self, path='./ChAruco_datas'):
-        # TODO : ChArUcoData 불러오기
-        pass
+        leftdata_glob = glob.glob(path+'/data_left*.json')
+        rightdata_glob = glob.glob(path+'/data_right*.json')
+
+        for data in leftdata_glob:
+            with open(data,'r') as f:
+                fstr = f.read()
+                f.close()
+            jstr = json.loads(fstr)
+            imgPoints = jstr['imgp']
+            Ids = jstr['ids']
+            Ids, imgPoints = np.array(Ids, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
+            self.leftChDatas.append(imgPoints)
+            self.leftChIds.append(Ids)
+        for data in rightdata_glob:
+            with open(data,'r') as f:
+                fstr = f.read()
+                f.close()
+            jstr = json.loads(fstr)
+            imgPoints = jstr['imgp']
+            Ids = jstr['ids']
+            Ids, imgPoints = np.array(Ids, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
+            self.rightChDatas.append(imgPoints)
+            self.rightChIds.append(Ids)
 
     def RunCalibration(self):
         _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.objDatas, self.leftDatas, self.imgSize, None, None)

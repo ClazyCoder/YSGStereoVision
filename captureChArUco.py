@@ -62,7 +62,6 @@ def main():
                 jsonfilename_left = './ChAruco_datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".json"
                 jsonfile_left = json.dumps(
                     {
-                        "objp" : objpoints.tolist(),
                         "imgp" : allCornersLeft.tolist(),
                         "ids" : allIdsLeft.tolist()
                     }
@@ -73,7 +72,6 @@ def main():
                 jsonfilename_right = './ChAruco_datas/data_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+str(today.minute)+str(today.second)+".json"
                 jsonfile_right = json.dumps(
                     {
-                        "objp" : objpoints.tolist(),
                         "imgp" : allCornersRight.tolist(),
                         "ids" : allIdsRight.tolist()
                     }
