@@ -1,4 +1,5 @@
 import cv2 as cv
+from cv2 import aruco
 import numpy as np
 import json
 import glob
@@ -24,6 +25,8 @@ class Calibrator:
         self.E  = None
         self.F  = None
         self.isCalibrated = False
+        aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
+        self.Charucoboard = aruco.CharucoBoard_create(7, 5, 1, .8, aruco_dict)
 
     def LoadDatas(self, path='./datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
@@ -97,9 +100,27 @@ class Calibrator:
             error = cv.norm(self.rightDatas[i], imgpoints_right, cv.NORM_L2)/len(imgpoints_right)
             mean_error += error
         print( "total error for right: {}".format(mean_error/len(self.objDatas)) )
+    
     def RunCalibrationWithChArUco(self):
-        # TODO : ChArUco 데이터로 캘리브레이션 수행
-        pass
+        _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
+                      charucoCorners=self.leftChDatas,
+                      charucoIds=self.leftChIds,
+                      board=self.Charucoboard,
+                      imageSize=self.imgSize,
+                      cameraMatrix=None,
+                      distCoeffs=None,
+                      flags=cv.CALIB_USE_INTRINSIC_GUESS,
+                      criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
+        _, mtx2, dist2, rvecs2, tvecs2, _, _ = cv.aruco.calibrateCameraCharuco(
+                      charucoCorners=self.rightChDatas,
+                      charucoIds=self.rightChIds,
+                      board=self.Charucoboard,
+                      imageSize=self.imgSize,
+                      cameraMatrix=None,
+                      distCoeffs=None,
+                      flags=cv.CALIB_USE_INTRINSIC_GUESS,
+                      criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
+        # TODO : Stereo Calibration 추가
 
     def SaveCalibrationDatas(self, directory='./calib'):
         if not os.path.isdir(directory):
