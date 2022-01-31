@@ -23,7 +23,7 @@ class Calibrator:
 
     def LoadDatas(self, path='./datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
-        rightdata_glob = glob.glob(path+'/data_left*.json')
+        rightdata_glob = glob.glob(path+'/data_right*.json')
 
         for data in leftdata_glob:
             with open(data,'r') as f:
