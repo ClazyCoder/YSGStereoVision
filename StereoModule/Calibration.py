@@ -120,7 +120,14 @@ class Calibrator:
                       distCoeffs=None,
                       flags=cv.CALIB_USE_INTRINSIC_GUESS,
                       criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
-        # TODO : Stereo Calibration 추가
+        ret, self.K1, self.D1,  \
+        self.K2, self.D2,       \
+        self.R, self.T,         \
+        self.E, self.F= cv.stereoCalibrate(
+             self.objDatas, self.leftDatas, self.rightDatas,
+              mtx1, dist1, mtx2, dist2, self.imgSize,
+              flags=cv.CALIB_FIX_INTRINSIC)
+        self.isCalibrated = True
 
     def SaveCalibrationDatas(self, directory='./calib'):
         if not os.path.isdir(directory):
