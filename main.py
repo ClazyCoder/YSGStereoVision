@@ -13,6 +13,7 @@ def main():
     stereoMatcher = SSM.StereoMatcher(SSM.STEREO_TYPE_BM,112,15)
     # stereoMatcher.leftMatcher.set...
     stereoMatcher.CreateWlsFilter()
+    stereoMatcher.SetWlsFilterParameters(8000,1.5)
 
     K1, K2, D1, D2, R, T = calibrator.K1, calibrator.K2, calibrator.D1, calibrator.D2, calibrator.R, calibrator.T
     R1, R2, P1, P2, Q, roi_left, roi_right = cv.stereoRectify(K1, D1, K2, D2, IMGSIZE, R, T ,alpha=0,flags=cv.CALIB_ZERO_DISPARITY)
@@ -30,18 +31,18 @@ def main():
 
         disparity = stereoMatcher.GetDisparity(gray_left, gray_right)
         filteredDisp = stereoMatcher.GetFilteredDisparity(gray_left,gray_right)
-        image3D = cv.reprojectImageTo3D(disparity, Q)
+        filteredDisp = filteredDisp.astype(np.float32)
+        image3D = cv.reprojectImageTo3D(filteredDisp, Q)
         depth = image3D[:,:,2].astype(np.float32)
         cv.normalize(depth,depth,0.0,1.0,cv.NORM_MINMAX)
         cv.normalize(disparity,disparity,1.0,0,cv.NORM_MINMAX)
-        cv.normalize(filteredDisp,filteredDisp,255.0,0,cv.NORM_MINMAX)
+        cv.normalize(filteredDisp,filteredDisp,1.0,0,cv.NORM_MINMAX)
         cv.imshow('left',leftImg)
         cv.imshow('right',rightImg)
         cv.imshow('rectified_left',left_rectified)
         cv.imshow('rectified_right',right_rectified)
         cv.imshow('disparity',disparity)
         cv.imshow('filteredDisparity',filteredDisp)
-        cv.imshow('depth',depth)
 
         k = cv.waitKey(1)
         if k == 27:

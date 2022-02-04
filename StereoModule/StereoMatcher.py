@@ -31,8 +31,10 @@ class StereoMatcher:
         self.wlsFilter.setSigmaColor(sigma)
 
     def GetFilteredDisparity(self, rectifiedLeft, rectifiedRight):
-        dispLeft = self.leftMatcher.compute(rectifiedLeft, rectifiedRight).astype(np.float32) / 16.0
-        dispRight = self.rightMatcher.compute(rectifiedLeft, rectifiedRight).astype(np.float32) / 16.0
+        dispLeft = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
+        dispRight = self.rightMatcher.compute(rectifiedRight,rectifiedLeft)
+        dispLeft = dispLeft.astype(np.float32) / 16.0
+        dispRight = dispRight.astype(np.float32) / 16.0
         dispLeft = np.int16(dispLeft)
         dispRight = np.int16(dispRight)
         filteredDisp = self.wlsFilter.filter(dispLeft, rectifiedLeft, None, dispRight)
