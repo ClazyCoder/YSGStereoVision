@@ -6,6 +6,18 @@ import CameraModule.CameraModule as CM
 
 IMGSIZE = (640,480)
 
+ply_header = '''ply
+format ascii 1.0
+element vertex %(vert_num)d
+property float x
+property float y
+property float z
+property uchar red
+property uchar green
+property uchar blue
+end_header
+'''
+
 def main():
     stereoCam = CM.StereoCamera(IMGSIZE)
     calibrator = SC.Calibrator(IMGSIZE)
@@ -34,6 +46,9 @@ def main():
         filteredDisp = filteredDisp.astype(np.float32)
         image3D = cv.reprojectImageTo3D(filteredDisp, Q)
         depth = image3D[:,:,2].astype(np.float32)
+
+        mask = disparity > disparity.min()
+
         cv.normalize(depth,depth,0.0,1.0,cv.NORM_MINMAX)
         cv.normalize(disparity,disparity,1.0,0,cv.NORM_MINMAX)
         cv.normalize(filteredDisp,filteredDisp,1.0,0,cv.NORM_MINMAX)
@@ -47,6 +62,10 @@ def main():
         k = cv.waitKey(1)
         if k == 27:
             break
+        elif k == 99: # 'c'
+            out_points = points_3D[mask]
+            out_colors = colors[mask]
+            pass
     
 
 if __name__ == "__main__":
