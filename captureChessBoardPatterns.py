@@ -45,8 +45,8 @@ def main():
                 cv.drawChessboardCorners(img_left, (9,7), corners_left2, ret_left)
                 cv.drawChessboardCorners(img_right, (9,7), corners_right2, ret_right)
                 today = datetime.datetime.today()
-                filename_left = './captures/capture_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"시"+str(today.minute)+"분"+str(today.second)+"초"+".jpg"
-                jsonfilename_left = './datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"시"+str(today.minute)+"분"+str(today.second)+"초"+".json"
+                filename_left = './captures/capture_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".jpg"
+                jsonfilename_left = './datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".json"
                 jsonfile_left = json.dumps(
                     {
                         "objp" : objp.tolist(),
@@ -55,8 +55,8 @@ def main():
                 )
                 with open(jsonfilename_left, 'w') as f:
                     f.write(jsonfile_left)
-                filename_right = './captures/capture_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"시"+str(today.minute)+"분"+str(today.second)+"초"+".jpg"
-                jsonfilename_right = './datas/data_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"시"+str(today.minute)+"분"+str(today.second)+"초"+".json"
+                filename_right = './captures/capture_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".jpg"
+                jsonfilename_right = './datas/data_right' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".json"
                 jsonfile_right = json.dumps(
                     {
                         "objp" : objp.tolist(),
