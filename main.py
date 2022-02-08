@@ -20,6 +20,7 @@ end_header
 '''
 
 def main():
+    today = datetime.datetime.today()
     NUM_DISPARITY = 112
     BLOCKSIZE = 15
 
@@ -79,7 +80,6 @@ def main():
             break
 
         elif k == 99: # 'c'
-            today = datetime.datetime.today()
             filename = './depth'+ str(today.year)+str(today.month)+str(today.day)+"-"+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".ply"
             depth_points = image3D[mask]
             point_colors = cv.cvtColor(left_valid_rectified,cv.COLOR_BGR2RGB)
@@ -93,6 +93,5 @@ def main():
                 f.write(ply_header % dict(vert_num=len(verts)))
                 np.savetxt(f, verts, '%f %f %f %d %d %d')
     
-
 if __name__ == "__main__":
     main()
