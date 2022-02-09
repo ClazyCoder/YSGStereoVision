@@ -17,20 +17,20 @@ class StereoMatcher:
         self.wlsFilter = None
         
         
-    def GetDisparity(self, rectifiedLeft, rectifiedRight):
+    def get_disparity(self, rectifiedLeft, rectifiedRight):
         disparity = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
         res = disparity.astype(np.float32) / 16.0
         return res
 
-    def CreateWlsFilter(self):
+    def create_wls_filter(self):
         self.rightMatcher = cv.ximgproc.createRightMatcher(self.leftMatcher)
         self.wlsFilter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.leftMatcher)
 
-    def SetWlsFilterParameters(self, lmbda, sigma):
+    def set_wls_filter_parameters(self, lmbda, sigma):
         self.wlsFilter.setLambda(lmbda)
         self.wlsFilter.setSigmaColor(sigma)
 
-    def GetFilteredDisparity(self, rectifiedLeft, rectifiedRight):
+    def get_filtered_disparity(self, rectifiedLeft, rectifiedRight):
         dispLeft = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
         dispRight = self.rightMatcher.compute(rectifiedRight,rectifiedLeft)
         dispLeft = dispLeft.astype(np.float32) / 16.0

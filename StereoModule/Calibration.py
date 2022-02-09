@@ -28,7 +28,7 @@ class Calibrator:
         aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
         self.Charucoboard = aruco.CharucoBoard_create(7, 5, 1, .8, aruco_dict)
 
-    def LoadDatas(self, path='./datas'):
+    def load_datas(self, path='./datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
         rightdata_glob = glob.glob(path+'/data_right*.json')
 
@@ -51,7 +51,7 @@ class Calibrator:
             imgPoints = np.array(imgPoints, dtype=np.float32)
             self.rightDatas.append(imgPoints)
 
-    def LoadChArUcoDatas(self, path='./ChAruco_datas'):
+    def load_ChArUco_datas(self, path='./ChAruco_datas'):
         leftdata_glob = glob.glob(path+'/data_left*.json')
         rightdata_glob = glob.glob(path+'/data_right*.json')
 
@@ -76,7 +76,7 @@ class Calibrator:
             self.rightChDatas.append(imgPoints)
             self.rightChIds.append(Ids)
 
-    def RunCalibration(self):
+    def run_calibration(self):
         _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.objDatas, self.leftDatas, self.imgSize, None, None)
         _, mtx2, dist2, rvecs2, tvecs2 =cv.calibrateCamera(self.objDatas, self.rightDatas, self.imgSize, None, None)
         
@@ -101,7 +101,7 @@ class Calibrator:
             mean_error += error
         print( "total error for right: {}".format(mean_error/len(self.objDatas)) )
     
-    def RunCalibrationWithChArUco(self):
+    def run_calibration_with_ChArUco(self):
         _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
                       charucoCorners=self.leftChDatas,
                       charucoIds=self.leftChIds,
@@ -129,7 +129,7 @@ class Calibrator:
               flags=cv.CALIB_FIX_INTRINSIC)
         self.isCalibrated = True
 
-    def SaveCalibrationDatas(self, directory='./calib'):
+    def save_calibration_datas(self, directory='./calib'):
         if not os.path.isdir(directory):
             os.mkdir(directory)
         filename = 'calib_data.json'
@@ -149,7 +149,7 @@ class Calibrator:
         with open(directory+'/'+filename, 'w') as f:
             f.write(jsonfile_calib)
     
-    def LoadCalibrationDatas(self, filename='./calib/calib_data.json'):
+    def load_calibration_datas(self, filename='./calib/calib_data.json'):
         with open(filename,'r') as f:
             fstr = f.read()
         f.close()
@@ -164,9 +164,9 @@ class Calibrator:
 
 def main():
     calibrator = Calibrator((640,480))
-    calibrator.LoadDatas('./datas')
-    calibrator.RunCalibration()
-    calibrator.SaveCalibrationDatas('./calib')
+    calibrator.load_datas('./datas')
+    calibrator.run_calibration()
+    calibrator.save_calibration_datas('./calib')
 
 if __name__ == "__main__":
     main()

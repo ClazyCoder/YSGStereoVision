@@ -16,7 +16,7 @@ class StereoCamera:
         self.rightCamera.set(cv.CAP_PROP_FRAME_WIDTH, imgSize[0])
         self.rightCamera.set(cv.CAP_PROP_FRAME_HEIGHT, imgSize[1])
         
-    def GetFrame(self):
+    def get_frame(self):
         if not (self.leftCamera.grab()and self.rightCamera.grab()):
             print("No more frames")
             return None
@@ -24,7 +24,7 @@ class StereoCamera:
         ret_right, frame_right = self.rightCamera.retrieve()
         return (frame_left, frame_right)
         
-    def GetFrameWithRet(self):
+    def get_frame_with_ret(self):
         if not (self.leftCamera.grab()and self.rightCamera.grab()):
             print("No more frames")
             return None

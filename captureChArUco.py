@@ -1,7 +1,10 @@
+'''
+
+'''
 import cv2 as cv
 import numpy as np
 from cv2 import aruco
-import CameraModule.CameraModule as CM
+import cameramodule.cameramodule as cm
 import os
 import datetime
 import json
@@ -20,7 +23,7 @@ def main():
     if not os.path.exists('./chessboard.tiff'):
         print('Chessboard has created.')
         cv.imwrite("./chessboard.tiff", imboard)
-    stereoCam = CM.StereoCamera(IMGSIZE)
+    stereoCam = cm.StereoCamera(IMGSIZE)
     allCornersLeft = []
     allCornersRight = []
     allIdsLeft = []
@@ -28,7 +31,7 @@ def main():
     objpoints= []
     isCalibrating = False
     while True:
-        leftFrame, rightFrame = stereoCam.GetFrame()
+        leftFrame, rightFrame = stereoCam.get_frame()
         grayLeft = cv.cvtColor(leftFrame, cv.COLOR_BGR2GRAY)
         grayRight = cv.cvtColor(rightFrame, cv.COLOR_BGR2GRAY)
         img_left = leftFrame.copy()

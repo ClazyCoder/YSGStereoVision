@@ -3,7 +3,7 @@ import numpy as np
 import json
 import os
 import datetime
-import CameraModule.CameraModule as CM
+import cameramodule.cameramodule as cm
 
 IMGSIZE = (640,480)
 
@@ -22,12 +22,12 @@ def main():
     imgpoints_left = []
     imgpoints_right = []
 
-    stereoCam = CM.StereoCamera(IMGSIZE)
+    stereoCam = cm.StereoCamera(IMGSIZE)
 
     isCalibrating = False
 
     while True:
-        ret_left, leftImg, ret_right, rightImg = stereoCam.GetFrameWithRet()
+        ret_left, leftImg, ret_right, rightImg = stereoCam.get_frame_with_ret()
         grayLeft = cv.cvtColor(leftImg, cv.COLOR_BGR2GRAY)
         grayRight = cv.cvtColor(rightImg,cv.COLOR_BGR2GRAY)
         if isCalibrating:
