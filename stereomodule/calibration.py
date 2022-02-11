@@ -7,15 +7,15 @@ import os
 
 class Calibrator:
 
-    def __init__(self, imgSize):
-        self.imgSize = imgSize[::-1]
-        self.objDatas = []
-        self.leftDatas = []
-        self.rightDatas = []
-        self.leftChDatas = []
-        self.rightChDatas = []
-        self.leftChIds = []
-        self.rightChIds = []
+    def __init__(self, img_size):
+        self.img_size = img_size[::-1]
+        self.obj_datas = []
+        self.left_datas = []
+        self.right_datas = []
+        self.left_Ch_datas = []
+        self.right_Ch_datas = []
+        self.left_Ch_ids = []
+        self.right_Ch_ids = []
         self.K1 = None
         self.K2 = None
         self.D1 = None
@@ -24,98 +24,99 @@ class Calibrator:
         self.T  = None
         self.E  = None
         self.F  = None
-        self.isCalibrated = False
+        self.is_calibrated = False
         aruco_dict = aruco.Dictionary_get(aruco.DICT_6X6_250)
-        self.Charucoboard = aruco.CharucoBoard_create(7, 5, 1, .8, aruco_dict)
+        self.Charuco_board = aruco.CharucoBoard_create(7, 5, 1, .8, aruco_dict)
 
     def load_datas(self, path='./datas'):
-        leftdata_glob = glob.glob(path+'/data_left*.json')
-        rightdata_glob = glob.glob(path+'/data_right*.json')
+        left_data_glob = glob.glob(path+'/data_left*.json')
+        right_data_glob = glob.glob(path+'/data_right*.json')
 
-        for data in leftdata_glob:
+        for data in left_data_glob:
             with open(data,'r') as f:
                 fstr = f.read()
                 f.close()
             jstr = json.loads(fstr)
-            objPoints = jstr['objp']
-            imgPoints = jstr['imgp']
-            objPoints, imgPoints = np.array(objPoints, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
-            self.objDatas.append(objPoints)
-            self.leftDatas.append(imgPoints)
-        for data in rightdata_glob:
+            obj_points = jstr['objp']
+            img_points = jstr['imgp']
+            obj_points, img_points = np.array(obj_points, dtype=np.float32), np.array(img_points, dtype=np.float32)
+            self.obj_datas.append(obj_points)
+            self.left_datas.append(img_points)
+        
+        for data in right_data_glob:
             with open(data,'r') as f:
                 fstr = f.read()
                 f.close()
             jstr = json.loads(fstr)
-            imgPoints = jstr['imgp']
-            imgPoints = np.array(imgPoints, dtype=np.float32)
-            self.rightDatas.append(imgPoints)
+            img_points = jstr['imgp']
+            img_points = np.array(img_points, dtype=np.float32)
+            self.right_datas.append(img_points)
 
     def load_ChArUco_datas(self, path='./ChAruco_datas'):
-        leftdata_glob = glob.glob(path+'/data_left*.json')
-        rightdata_glob = glob.glob(path+'/data_right*.json')
+        left_data_glob = glob.glob(path+'/data_left*.json')
+        right_data_glob = glob.glob(path+'/data_right*.json')
 
-        for data in leftdata_glob:
+        for data in left_data_glob:
             with open(data,'r') as f:
                 fstr = f.read()
                 f.close()
             jstr = json.loads(fstr)
-            imgPoints = jstr['imgp']
-            Ids = jstr['ids']
-            Ids, imgPoints = np.array(Ids, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
-            self.leftChDatas.append(imgPoints)
-            self.leftChIds.append(Ids)
-        for data in rightdata_glob:
+            img_points = jstr['imgp']
+            ids = jstr['ids']
+            ids, img_points = np.array(ids, dtype=np.float32), np.array(img_points, dtype=np.float32)
+            self.left_Ch_datas.append(img_points)
+            self.left_Ch_ids.append(ids)
+        for data in right_data_glob:
             with open(data,'r') as f:
                 fstr = f.read()
                 f.close()
             jstr = json.loads(fstr)
-            imgPoints = jstr['imgp']
-            Ids = jstr['ids']
-            Ids, imgPoints = np.array(Ids, dtype=np.float32), np.array(imgPoints, dtype=np.float32)
-            self.rightChDatas.append(imgPoints)
-            self.rightChIds.append(Ids)
+            img_points = jstr['imgp']
+            ids = jstr['ids']
+            ids, img_points = np.array(ids, dtype=np.float32), np.array(img_points, dtype=np.float32)
+            self.right_Ch_datas.append(img_points)
+            self.right_Ch_ids.append(ids)
 
     def run_calibration(self):
-        _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.objDatas, self.leftDatas, self.imgSize, None, None)
-        _, mtx2, dist2, rvecs2, tvecs2 =cv.calibrateCamera(self.objDatas, self.rightDatas, self.imgSize, None, None)
+        _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.obj_datas, self.left_datas, self.img_size, None, None)
+        _, mtx2, dist2, rvecs2, tvecs2 =cv.calibrateCamera(self.obj_datas, self.right_datas, self.img_size, None, None)
         
         ret, self.K1, self.D1,  \
         self.K2, self.D2,       \
         self.R, self.T,         \
         self.E, self.F= cv.stereoCalibrate(
-             self.objDatas, self.leftDatas, self.rightDatas,
-              mtx1, dist1, mtx2, dist2, self.imgSize,
+             self.obj_datas, self.left_datas, self.right_datas,
+              mtx1, dist1, mtx2, dist2, self.img_size,
               flags=cv.CALIB_FIX_INTRINSIC)
-        self.isCalibrated = True
+        self.is_calibrated = True
         mean_error = 0
-        for i in range(len(self.objDatas)):
-            imgpoints_left, _ = cv.projectPoints(self.objDatas[i], rvecs1[i], tvecs1[i], mtx1, dist1)
-            error = cv.norm(self.leftDatas[i], imgpoints_left, cv.NORM_L2)/len(imgpoints_left)
+        for i in range(len(self.obj_datas)):
+            img_points_left, _ = cv.projectPoints(self.obj_datas[i], rvecs1[i], tvecs1[i], mtx1, dist1)
+            error = cv.norm(self.left_datas[i], img_points_left, cv.NORM_L2) / len(img_points_left)
             mean_error += error
-        print( "total error for left: {}".format(mean_error/len(self.objDatas)) )
+        print( "total error for left: {}".format(mean_error / len(self.obj_datas)) )
         mean_error = 0
-        for i in range(len(self.objDatas)):
-            imgpoints_right, _ = cv.projectPoints(self.objDatas[i], rvecs2[i], tvecs2[i], mtx2, dist2)
-            error = cv.norm(self.rightDatas[i], imgpoints_right, cv.NORM_L2)/len(imgpoints_right)
+        for i in range(len(self.obj_datas)):
+            img_points_right, _ = cv.projectPoints(self.obj_datas[i], rvecs2[i], tvecs2[i], mtx2, dist2)
+            error = cv.norm(self.right_datas[i], img_points_right, cv.NORM_L2) / len(img_points_right)
             mean_error += error
-        print( "total error for right: {}".format(mean_error/len(self.objDatas)) )
+        print( "total error for right: {}".format(mean_error / len(self.obj_datas)) )
     
     def run_calibration_with_ChArUco(self):
         _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
-                      charucoCorners=self.leftChDatas,
-                      charucoIds=self.leftChIds,
-                      board=self.Charucoboard,
-                      imageSize=self.imgSize,
+                      charucoCorners=self.left_Ch_datas,
+                      charucoIds=self.left_Ch_ids,
+                      board=self.Charuco_board,
+                      imageSize=self.img_size,
                       cameraMatrix=None,
                       distCoeffs=None,
                       flags=cv.CALIB_USE_INTRINSIC_GUESS,
                       criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
         _, mtx2, dist2, rvecs2, tvecs2, _, _ = cv.aruco.calibrateCameraCharuco(
-                      charucoCorners=self.rightChDatas,
-                      charucoIds=self.rightChIds,
-                      board=self.Charucoboard,
-                      imageSize=self.imgSize,
+                      charucoCorners=self.right_Ch_datas,
+                      charucoIds=self.right_Ch_ids,
+                      board=self.Charuco_board,
+                      imageSize=self.img_size,
                       cameraMatrix=None,
                       distCoeffs=None,
                       flags=cv.CALIB_USE_INTRINSIC_GUESS,
@@ -124,10 +125,10 @@ class Calibrator:
         self.K2, self.D2,       \
         self.R, self.T,         \
         self.E, self.F= cv.stereoCalibrate(
-             self.objDatas, self.leftDatas, self.rightDatas,
-              mtx1, dist1, mtx2, dist2, self.imgSize,
+             self.obj_datas, self.left_datas, self.right_datas,
+              mtx1, dist1, mtx2, dist2, self.img_size,
               flags=cv.CALIB_FIX_INTRINSIC)
-        self.isCalibrated = True
+        self.is_calibrated = True
 
     def save_calibration_datas(self, directory='./calib'):
         if not os.path.isdir(directory):
@@ -160,7 +161,7 @@ class Calibrator:
         self.D2 = np.array(jstr["D2"])
         self.R = np.array(jstr["R"])
         self.T = np.array(jstr["T"])
-        self.isCalibrated = True
+        self.is_calibrated = True
 
 def main():
     calibrator = Calibrator((640,480))
