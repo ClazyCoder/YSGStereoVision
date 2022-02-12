@@ -6,36 +6,36 @@ STEREO_TYPE_SGBM = int(1)
 
 class StereoMatcher:
     
-    def __init__(self, stereoType,numDisparities, blockSize):
-        if stereoType == STEREO_TYPE_BM:
-            self.leftMatcher = cv.StereoBM_create(numDisparities=numDisparities, blockSize=blockSize)
-        elif stereoType == STEREO_TYPE_SGBM:
-            self.leftMatcher = cv.StereoSGBM_create(numDisparities=numDisparities, blockSize=blockSize)
+    def __init__(self, stereo_type,num_disparities, block_size):
+        if stereo_type == STEREO_TYPE_BM:
+            self.left_matcher = cv.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
+        elif stereo_type == STEREO_TYPE_SGBM:
+            self.left_matcher = cv.StereoSGBM_create(numDisparities=num_disparities, blockSize=block_size)
         else:
-            self.leftMatcher = cv.StereoBM_create(numDisparities=numDisparities, blockSize=blockSize)
-        self.rightMatcher = None
-        self.wlsFilter = None
+            self.left_matcher = cv.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
+        self.right_matcher = None
+        self.wls_filter = None
         
         
-    def get_disparity(self, rectifiedLeft, rectifiedRight):
-        disparity = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
+    def get_disparity(self, rectified_left, rectified_right):
+        disparity = self.left_matcher.compute(rectified_left, rectified_right)
         res = disparity.astype(np.float32) / 16.0
         return res
 
     def create_wls_filter(self):
-        self.rightMatcher = cv.ximgproc.createRightMatcher(self.leftMatcher)
-        self.wlsFilter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.leftMatcher)
+        self.right_matcher = cv.ximgproc.createRightMatcher(self.left_matcher)
+        self.wls_filter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.left_matcher)
 
     def set_wls_filter_parameters(self, lmbda, sigma):
-        self.wlsFilter.setLambda(lmbda)
-        self.wlsFilter.setSigmaColor(sigma)
+        self.wls_filter.setLambda(lmbda)
+        self.wls_filter.setSigmaColor(sigma)
 
-    def get_filtered_disparity(self, rectifiedLeft, rectifiedRight):
-        dispLeft = self.leftMatcher.compute(rectifiedLeft, rectifiedRight)
-        dispRight = self.rightMatcher.compute(rectifiedRight,rectifiedLeft)
-        dispLeft = dispLeft.astype(np.float32) / 16.0
-        dispRight = dispRight.astype(np.float32) / 16.0
-        dispLeft = np.int16(dispLeft)
-        dispRight = np.int16(dispRight)
-        filteredDisp = self.wlsFilter.filter(dispLeft, rectifiedLeft, None, dispRight)
-        return filteredDisp
+    def get_filtered_disparity(self, rectified_left, rectified_right):
+        disp_left = self.left_matcher.compute(rectified_left, rectified_right)
+        disp_right = self.right_matcher.compute(rectified_right,rectified_left)
+        disp_left = disp_left.astype(np.float32) / 16.0
+        disp_right = disp_right.astype(np.float32) / 16.0
+        disp_left = np.int16(disp_left)
+        disp_right = np.int16(disp_right)
+        filtered_disp = self.wlsFilter.filter(disp_left, rectified_left, None, disp_right)
+        return filtered_disp
