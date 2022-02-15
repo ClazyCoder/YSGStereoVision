@@ -18,25 +18,25 @@ def main():
     objp = np.zeros((7*9,3), np.float32)
     objp[:,:2] = np.mgrid[0:9,0:7].T.reshape(-1,2)
 
-    objpoints = []
+    obj_points = []
     imgpoints_left = []
     imgpoints_right = []
 
-    stereoCam = cm.StereoCamera(IMGSIZE)
+    stereo_cam = cm.StereoCamera(IMGSIZE)
 
     isCalibrating = False
 
     while True:
-        ret_left, leftImg, ret_right, rightImg = stereoCam.get_frame_with_ret()
-        grayLeft = cv.cvtColor(leftImg, cv.COLOR_BGR2GRAY)
-        grayRight = cv.cvtColor(rightImg,cv.COLOR_BGR2GRAY)
+        ret_left, leftImg, ret_right, rightImg = stereo_cam.get_frame_with_ret()
+        gray_left = cv.cvtColor(leftImg, cv.COLOR_BGR2GRAY)
+        gray_right = cv.cvtColor(rightImg,cv.COLOR_BGR2GRAY)
         if isCalibrating:
-            retLeftCorner, corners_left = cv.findChessboardCorners(grayLeft, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
-            retRightCorner, corners_right = cv.findChessboardCorners(grayRight, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
+            retLeftCorner, corners_left = cv.findChessboardCorners(gray_left, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
+            retRightCorner, corners_right = cv.findChessboardCorners(gray_right, (9,7), flags=cv.CALIB_CB_ADAPTIVE_THRESH)
             if retLeftCorner and retRightCorner:
-                objpoints.append(objp)
-                corners_left2 = cv.cornerSubPix(grayLeft,corners_left, (11,11), (-1,-1), criteria)
-                corners_right2 = cv.cornerSubPix(grayRight,corners_right, (11,11), (-1,-1), criteria)
+                obj_points.append(objp)
+                corners_left2 = cv.cornerSubPix(gray_left,corners_left, (11,11), (-1,-1), criteria)
+                corners_right2 = cv.cornerSubPix(gray_right,corners_right, (11,11), (-1,-1), criteria)
                 imgpoints_left.append(corners_left2)
                 imgpoints_right.append(corners_right2)
 
