@@ -18,19 +18,31 @@ class StereoMatcher:
         
         
     def get_disparity(self, rectified_left, rectified_right):
+        '''
+        Disparity를 계산하여 반환하는 메서드
+        '''
         disparity = self.left_matcher.compute(rectified_left, rectified_right)
         res = disparity.astype(np.float32) / 16.0
         return res
 
     def create_wls_filter(self):
+        '''
+        WlsFilter 객체를 생성하는 메서드
+        '''
         self.right_matcher = cv.ximgproc.createRightMatcher(self.left_matcher)
         self.wls_filter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.left_matcher)
 
     def set_wls_filter_parameters(self, lmbda, sigma):
+        '''
+        WlsFilter의 패러미터를 변경하는 메서드
+        '''
         self.wls_filter.setLambda(lmbda)
         self.wls_filter.setSigmaColor(sigma)
 
     def get_filtered_disparity(self, rectified_left, rectified_right):
+        '''
+        WlsFilter를 적용한 Disparity를 반환하는 메서드
+        '''
         disp_left = self.left_matcher.compute(rectified_left, rectified_right)
         disp_right = self.right_matcher.compute(rectified_right,rectified_left)
         disp_left = disp_left.astype(np.float32) / 16.0
