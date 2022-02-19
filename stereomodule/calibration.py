@@ -29,6 +29,9 @@ class Calibrator:
         self.Charuco_board = aruco.CharucoBoard_create(7, 5, 1, .8, aruco_dict)
 
     def load_datas(self, path='./datas'):
+        '''
+        지정된 path로 부터 패턴 데이터를 불러오는 메서드
+        '''
         left_data_glob = glob.glob(path+'/data_left*.json')
         right_data_glob = glob.glob(path+'/data_right*.json')
 
@@ -53,6 +56,9 @@ class Calibrator:
             self.right_datas.append(img_points)
 
     def load_ChArUco_datas(self, path='./ChAruco_datas'):
+        '''
+        지정된 path로 부터 ChArUco 패턴 데이터를 불러오는 메서드
+        '''
         left_data_glob = glob.glob(path+'/data_left*.json')
         right_data_glob = glob.glob(path+'/data_right*.json')
 
@@ -78,6 +84,9 @@ class Calibrator:
             self.right_Ch_ids.append(ids)
 
     def run_calibration(self):
+        '''
+        스테레오 캘리브레이션을 수행하고 결과를 필드에 저장하는 메서드
+        '''
         _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.obj_datas, self.left_datas, self.img_size, None, None)
         _, mtx2, dist2, rvecs2, tvecs2 =cv.calibrateCamera(self.obj_datas, self.right_datas, self.img_size, None, None)
         
@@ -103,6 +112,10 @@ class Calibrator:
         print( "total error for right: {}".format(mean_error / len(self.obj_datas)) )
     
     def run_calibration_with_ChArUco(self):
+        '''
+        두 카메라의 패러미터를 ChArUco패턴을 통해 계산하는 것을 제외하면
+        run_calibration 메서드와 동일
+        '''
         _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
                       charucoCorners=self.left_Ch_datas,
                       charucoIds=self.left_Ch_ids,
@@ -131,6 +144,9 @@ class Calibrator:
         self.is_calibrated = True
 
     def save_calibration_datas(self, directory='./calib'):
+        '''
+        얻어낸 스테레오 카메라 패러미터를 path에 JSON형식으로 저장하는 메서드
+        '''
         if not os.path.isdir(directory):
             os.mkdir(directory)
         filename = 'calib_data.json'
@@ -151,6 +167,9 @@ class Calibrator:
             f.write(jsonfile_calib)
     
     def load_calibration_datas(self, filename='./calib/calib_data.json'):
+        '''
+        저장된 JSON형식의 카메라 패러미터를 불러오는 메서드
+        '''
         with open(filename,'r') as f:
             fstr = f.read()
         f.close()
