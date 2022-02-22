@@ -49,5 +49,5 @@ class StereoMatcher:
         disp_right = disp_right.astype(np.float32) / 16.0
         disp_left = np.int16(disp_left)
         disp_right = np.int16(disp_right)
-        filtered_disp = self.wlsFilter.filter(disp_left, rectified_left, None, disp_right)
+        filtered_disp = self.wls_filter.filter(disp_left, rectified_left, None, disp_right)
         return filtered_disp

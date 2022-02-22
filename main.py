@@ -97,7 +97,7 @@ def main():
             depth_points = image3D[mask]
             point_colors = cv.cvtColor(left_valid_rectified,cv.COLOR_BGR2RGB)
             point_colors = point_colors[mask]
-            point_colors = np.nan_to_num(point_colors,posinf=0,neginf=0)
+            depth_points = np.nan_to_num(depth_points,posinf=0,neginf=0)
 
             # 저장 형식은 점의 위치 (x,y,z) 색상 값(r,g,b)
             verts = depth_points.reshape(-1, 3)
