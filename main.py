@@ -68,7 +68,7 @@ def main():
         image3D = cv.reprojectImageTo3D(disparity_valid_filtered, Q)
         depth = image3D[:,:,2].astype(np.float32)
         
-        # 원하는 disparity만 뽑아낼 수 있는 numpy mask식(기호에 따라 수정가능)
+        # 원하는 disparity만 뽑아낼 수 있는 numpy mask식(필요에 따라 수정가능)
         mask = disparity_valid_filtered > disparity_valid_filtered.min()
 
         # 결과 출력 이전에 0 ~ 1 사이의 값으로 정규화
@@ -77,21 +77,24 @@ def main():
         cv.normalize(disparity_valid_filtered,disparity_valid_filtered,1.0,0,cv.NORM_MINMAX)
         
         # 결과 출력
+            # 원본 영상
         cv.imshow('left',leftImg)
         cv.imshow('right',rightImg)
+            # Rectification 이후 영상
         cv.imshow('rectified_left',left_rectified)
         cv.imshow('rectified_right',right_rectified)
         #cv.imshow('rectified_left_valid',left_valid_rectified)
         #cv.imshow('rectified_right_valid',right_valid_rectified)
+            # 계산된 disparity와 filtering을 거친 disparity
         cv.imshow('disparity',disparity_valid)
         cv.imshow('filteredDisparity',disparity_valid_filtered)
 
         k = cv.waitKey(1)
 
-        if k == 27:
+        if k == 27: # Press ESC to Quit 
             break
 
-        elif k == 99: # 'c'를 누를시 얻어낸 Filtered Disparity를 Q행렬로 3차원 복원후 저장.
+        elif k == 99: # 'c'를 누를시 얻어낸 Filtered Disparity를 Q행렬로 3차원 복원 후 저장.
             today = datetime.datetime.today()
             filename = './depth'+ str(today.year)+str(today.month)+str(today.day)+"-"+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".ply"
             depth_points = image3D[mask]
@@ -99,7 +102,7 @@ def main():
             point_colors = point_colors[mask]
             depth_points = np.nan_to_num(depth_points,posinf=0,neginf=0)
 
-            # 저장 형식은 점의 위치 (x,y,z) 색상 값(r,g,b)
+            # 저장 형식은 점의 위치와 색상 값 (x, y, z, R, G, B)
             verts = depth_points.reshape(-1, 3)
             point_colors = point_colors.reshape(-1, 3)
             verts = np.hstack([verts, point_colors])
