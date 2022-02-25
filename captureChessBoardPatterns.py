@@ -27,7 +27,7 @@ def main():
     isCalibrating = False
 
     while True:
-        ret_left, leftImg, ret_right, rightImg = stereo_cam.get_frame_with_ret()
+        leftImg, rightImg = stereo_cam.get_frame()
         gray_left = cv.cvtColor(leftImg, cv.COLOR_BGR2GRAY)
         gray_right = cv.cvtColor(rightImg,cv.COLOR_BGR2GRAY)
         if isCalibrating:
@@ -42,8 +42,8 @@ def main():
 
                 img_left = leftImg.copy()
                 img_right = rightImg.copy()
-                cv.drawChessboardCorners(img_left, (9,7), corners_left2, ret_left)
-                cv.drawChessboardCorners(img_right, (9,7), corners_right2, ret_right)
+                cv.drawChessboardCorners(img_left, (9,7), corners_left2, retLeftCorner)
+                cv.drawChessboardCorners(img_right, (9,7), corners_right2, retRightCorner)
                 today = datetime.datetime.today()
                 filename_left = './captures/capture_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".jpg"
                 jsonfilename_left = './datas/data_left' + str(today.year)+str(today.month)+str(today.day)+'-'+str(today.hour)+"h"+str(today.minute)+"m"+str(today.second)+"s"+".json"
