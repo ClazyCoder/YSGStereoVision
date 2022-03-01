@@ -113,6 +113,7 @@ class Calibrator:
     
     def run_calibration_with_ChArUco(self):
         '''
+        스테레오 캘리브레이션을 수행하고 결과를 필드에 저장하는 메서드
         두 카메라의 패러미터를 ChArUco패턴을 통해 계산하는 것을 제외하면
         run_calibration 메서드와 동일
         '''
