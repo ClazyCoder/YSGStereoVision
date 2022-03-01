@@ -111,38 +111,38 @@ class Calibrator:
             mean_error += error
         print( "total error for right: {}".format(mean_error / len(self.obj_datas)) )
     
-    def run_calibration_with_ChArUco(self):
-        '''
-        스테레오 캘리브레이션을 수행하고 결과를 필드에 저장하는 메서드
-        두 카메라의 패러미터를 ChArUco패턴을 통해 계산하는 것을 제외하면
-        run_calibration 메서드와 동일
-        '''
-        _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
-                      charucoCorners=self.left_Ch_datas,
-                      charucoIds=self.left_Ch_ids,
-                      board=self.Charuco_board,
-                      imageSize=self.img_size,
-                      cameraMatrix=None,
-                      distCoeffs=None,
-                      flags=cv.CALIB_USE_INTRINSIC_GUESS,
-                      criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
-        _, mtx2, dist2, rvecs2, tvecs2, _, _ = cv.aruco.calibrateCameraCharuco(
-                      charucoCorners=self.right_Ch_datas,
-                      charucoIds=self.right_Ch_ids,
-                      board=self.Charuco_board,
-                      imageSize=self.img_size,
-                      cameraMatrix=None,
-                      distCoeffs=None,
-                      flags=cv.CALIB_USE_INTRINSIC_GUESS,
-                      criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
-        ret, self.K1, self.D1,  \
-        self.K2, self.D2,       \
-        self.R, self.T,         \
-        self.E, self.F= cv.stereoCalibrate(
-             self.obj_datas, self.left_datas, self.right_datas,
-              mtx1, dist1, mtx2, dist2, self.img_size,
-              flags=cv.CALIB_FIX_INTRINSIC)
-        self.is_calibrated = True
+    # def run_calibration_with_ChArUco(self):
+    #     '''
+    #     스테레오 캘리브레이션을 수행하고 결과를 필드에 저장하는 메서드
+    #     두 카메라의 패러미터를 ChArUco패턴을 통해 계산하는 것을 제외하면
+    #     run_calibration 메서드와 동일
+    #     '''
+    #     _, mtx1, dist1, rvecs1, tvecs1, _, _ = cv.aruco.calibrateCameraCharuco(
+    #                   charucoCorners=self.left_Ch_datas,
+    #                   charucoIds=self.left_Ch_ids,
+    #                   board=self.Charuco_board,
+    #                   imageSize=self.img_size,
+    #                   cameraMatrix=None,
+    #                   distCoeffs=None,
+    #                   flags=cv.CALIB_USE_INTRINSIC_GUESS,
+    #                   criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
+    #     _, mtx2, dist2, rvecs2, tvecs2, _, _ = cv.aruco.calibrateCameraCharuco(
+    #                   charucoCorners=self.right_Ch_datas,
+    #                   charucoIds=self.right_Ch_ids,
+    #                   board=self.Charuco_board,
+    #                   imageSize=self.img_size,
+    #                   cameraMatrix=None,
+    #                   distCoeffs=None,
+    #                   flags=cv.CALIB_USE_INTRINSIC_GUESS,
+    #                   criteria=(cv.TERM_CRITERIA_EPS & cv.TERM_CRITERIA_COUNT, 10000, 1e-9))
+    #     ret, self.K1, self.D1,  \
+    #     self.K2, self.D2,       \
+    #     self.R, self.T,         \
+    #     self.E, self.F= cv.stereoCalibrate(
+    #          self.obj_datas, self.left_datas, self.right_datas,
+    #           mtx1, dist1, mtx2, dist2, self.img_size,
+    #           flags=cv.CALIB_FIX_INTRINSIC)
+    #     self.is_calibrated = True
 
     def save_calibration_datas(self, directory='./calib'):
         '''
