@@ -15,8 +15,15 @@ class StereoMatcher:
             self.left_matcher = cv.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
         self.right_matcher = None
         self.wls_filter = None
-        
-        
+    
+    def set_num_disparities(num_disparities):
+        # TODO : set numDisparities of stereo matcher
+        pass    
+    def set_block_size(block_size):
+        # TODO : set blockSize of stereo matcher
+        pass
+    # TODO : Add more methods for setting parameters for stereo matcher
+    
     def get_disparity(self, rectified_left, rectified_right):
         '''
         Disparity를 계산하여 반환하는 메서드
