@@ -16,11 +16,29 @@ class StereoMatcher:
         self.right_matcher = None
         self.wls_filter = None
     
+    def set_min_disparities(min_disparities):
+        # TODO : set minDisparities of stereo matcher
+        pass
     def set_num_disparities(num_disparities):
         # TODO : set numDisparities of stereo matcher
         pass    
     def set_block_size(block_size):
         # TODO : set blockSize of stereo matcher
+        pass
+    def set_pre_filter_cap(pre_filter_cap):
+        # TODO : set preFilterCap of stereo matcher
+        pass
+    def set_pre_filter_size(pre_filter_size):
+        # TODO : set preFilterSize of stereo matcher
+        pass
+    def set_pre_filter_type(pre_filter_type):
+        # TODO : set preFilterType of stereo matcher
+        pass
+    def set_uniqueness_ratio(uniqueness_ratio):
+        # TODO : set uniquenessRatio of stereo matcher
+        pass
+    def set_texture_threshold(texture_threshold):
+        # TODO : set textureThreshold of stereo matcher
         pass
     # TODO : Add more methods for setting parameters for stereo matcher
     
