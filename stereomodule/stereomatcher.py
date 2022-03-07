@@ -40,8 +40,25 @@ class StereoMatcher:
     def set_texture_threshold(texture_threshold):
         # TODO : set textureThreshold of stereo matcher
         pass
-    # TODO : Add more methods for setting parameters for stereo matcher
-    
+    def set_speckle_range(speckle_range):
+        # TODO : set speckleRange of stereo matcher
+        pass
+    def set_speckle_window_size(speckle_window_size):
+        # TODO : set speckleWindowSize of stereo matcher
+        pass
+    def set_disp23_max_diff(disp23_max_diff):
+        # TODO : set disp12MaxDiff of stereo matcher
+        pass
+    def set_p1(p1):
+        # TODO : set P1 value for sgbm stereo matcher
+        pass
+    def set_p2(p2):
+        # TODO : set P2 value for sgbm stereo matcher
+        pass
+    def set_mode(mode):
+        # TODO : set mode of sgbm stereo matcher
+        pass
+
     def get_disparity(self, rectified_left, rectified_right):
         '''
         Disparity를 계산하여 반환하는 메서드
