@@ -8,56 +8,61 @@ class StereoMatcher:
     
     def __init__(self, stereo_type,num_disparities, block_size):
         if stereo_type == STEREO_TYPE_BM:
+            self.stereo_type = STEREO_TYPE_BM
             self.left_matcher = cv.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
         elif stereo_type == STEREO_TYPE_SGBM:
+            self.stereo_type = STEREO_TYPE_SGBM
             self.left_matcher = cv.StereoSGBM_create(numDisparities=num_disparities, blockSize=block_size)
         else:
+            self.stereo_type = STEREO_TYPE_BM
             self.left_matcher = cv.StereoBM_create(numDisparities=num_disparities, blockSize=block_size)
         self.right_matcher = None
         self.wls_filter = None
     
-    def set_min_disparities(min_disparities):
-        # TODO : set minDisparities of stereo matcher
-        pass
-    def set_num_disparities(num_disparities):
-        # TODO : set numDisparities of stereo matcher
-        pass    
-    def set_block_size(block_size):
-        # TODO : set blockSize of stereo matcher
-        pass
-    def set_pre_filter_cap(pre_filter_cap):
-        # TODO : set preFilterCap of stereo matcher
-        pass
-    def set_pre_filter_size(pre_filter_size):
-        # TODO : set preFilterSize of stereo matcher
-        pass
-    def set_pre_filter_type(pre_filter_type):
-        # TODO : set preFilterType of stereo matcher
-        pass
-    def set_uniqueness_ratio(uniqueness_ratio):
-        # TODO : set uniquenessRatio of stereo matcher
-        pass
-    def set_texture_threshold(texture_threshold):
-        # TODO : set textureThreshold of stereo matcher
-        pass
-    def set_speckle_range(speckle_range):
-        # TODO : set speckleRange of stereo matcher
-        pass
-    def set_speckle_window_size(speckle_window_size):
-        # TODO : set speckleWindowSize of stereo matcher
-        pass
-    def set_disp23_max_diff(disp23_max_diff):
-        # TODO : set disp12MaxDiff of stereo matcher
-        pass
-    def set_p1(p1):
-        # TODO : set P1 value for sgbm stereo matcher
-        pass
-    def set_p2(p2):
-        # TODO : set P2 value for sgbm stereo matcher
-        pass
-    def set_mode(mode):
-        # TODO : set mode of sgbm stereo matcher
-        pass
+    def set_min_disparities(self, min_disparities):
+        self.left_matcher.setMinDisparities(min_disparities)
+
+    def set_num_disparity(self, num_disparity):
+        self.left_matcher.setNumDisparity(num_disparity)
+
+    def set_block_size(self, block_size):
+        self.left_matcher.setBlockSize(block_size)
+
+    def set_pre_filter_cap(self, pre_filter_cap):
+        self.left_matcher.setPreFilterCap(pre_filter_cap)
+
+    def set_pre_filter_size(self, pre_filter_size):
+        self.left_matcher.setPreFilterSize(pre_filter_size)
+
+    def set_pre_filter_type(self, pre_filter_type):
+        self.left_matcher.setPreFilterType(pre_filter_type)
+
+    def set_uniqueness_ratio(self, uniqueness_ratio):
+        self.left_matcher.setUniquenessRatio(uniqueness_ratio)
+
+    def set_texture_threshold(self, texture_threshold):
+        self.left_matcher.setTextureThreshold(texture_threshold)
+
+    def set_speckle_range(self, speckle_range):
+        self.left_matcher.setSpeckleRange(speckle_range)
+
+    def set_speckle_window_size(self, speckle_window_size):
+        self.left_matcher.setSpeckleWindowSize(speckle_window_size)
+
+    def set_disp23_max_diff(self, disp23_max_diff):
+        self.left_matcher.setDisp12MaxDiff(disp23_max_diff)
+
+    def set_p1(self, p1):
+        assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has P1 parameter!'
+        self.left_matcher.setP1(p1)
+
+    def set_p2(self, p2):
+        assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has P2 parameter!'
+        self.left_matcher.setP2(p2)
+
+    def set_mode(self, mode):
+        assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has Matching Mode Parameter!'
+        self.left_matcher.setMode(mode)
 
     def get_disparity(self, rectified_left, rectified_right):
         '''
