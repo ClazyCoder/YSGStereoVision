@@ -19,48 +19,100 @@ class StereoMatcher:
         self.right_matcher = None
         self.wls_filter = None
     
-    def set_min_disparities(self, min_disparities):
-        self.left_matcher.setMinDisparities(min_disparities)
+    def set_min_disparity(self, min_disparity):
+        '''
+        BM과 SGBM 클래스의 MinDisparity 패러미터를 설정하는 메서드
+        '''
+        self.left_matcher.setMinDisparity(min_disparity)
 
-    def set_num_disparity(self, num_disparity):
-        self.left_matcher.setNumDisparity(num_disparity)
+    def set_num_disparities(self, num_disparities):
+        '''
+        BM과 SGBM 클래스의 NumDisparities 패러미터를 설정하는 메서드
+        '''
+        self.left_matcher.setNumDisparities(num_disparities)
 
     def set_block_size(self, block_size):
+        '''
+        BM과 SGBM 클래스의 BlockSize 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setBlockSize(block_size)
 
     def set_pre_filter_cap(self, pre_filter_cap):
+        '''
+        BM과 SGBM 클래스의 PreFilterCap 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setPreFilterCap(pre_filter_cap)
 
     def set_pre_filter_size(self, pre_filter_size):
+        '''
+        BM 클래스의 PreFilterSize 패러미터를 설정하는 메서드
+        '''
+        assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has PreFilterSize parameter!'
         self.left_matcher.setPreFilterSize(pre_filter_size)
 
     def set_pre_filter_type(self, pre_filter_type):
+        '''
+        BM 클래스의 PreFilterType 패러미터를 설정하는 메서드
+        '''
+        assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has PreFilterType parameter!'
         self.left_matcher.setPreFilterType(pre_filter_type)
 
     def set_uniqueness_ratio(self, uniqueness_ratio):
+        '''
+        BM과 SGBM 클래스의 UniquenessRatio 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setUniquenessRatio(uniqueness_ratio)
 
     def set_texture_threshold(self, texture_threshold):
+        '''
+        BM 클래스의 TextureThreshold 패러미터를 설정하는 메서드
+        '''
+        assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has TextureThreshold parameter!'
         self.left_matcher.setTextureThreshold(texture_threshold)
+    
+    def set_smaller_block_size(self, smaller_block_size):
+        '''
+        BM 클래스의 SmallerBlockSize 패러미터를 설정하는 메서드
+        '''
+        assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has SmallerBlockSize parameter!'
+        self.left_matcher.setSmallerBlockSize(smaller_block_size)
 
     def set_speckle_range(self, speckle_range):
+        '''
+        BM과 SGBM 클래스의 SpeckleRange 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setSpeckleRange(speckle_range)
 
     def set_speckle_window_size(self, speckle_window_size):
+        '''
+        BM과 SGBM 클래스의 SpeckleWindowSize 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setSpeckleWindowSize(speckle_window_size)
 
     def set_disp23_max_diff(self, disp23_max_diff):
+        '''
+        BM과 SGBM 클래스의 Disp12MaxDiff 패러미터를 설정하는 메서드
+        '''
         self.left_matcher.setDisp12MaxDiff(disp23_max_diff)
 
     def set_p1(self, p1):
+        '''
+        SGBM 클래스의 P1 패러미터를 설정하는 메서드
+        '''
         assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has P1 parameter!'
         self.left_matcher.setP1(p1)
 
     def set_p2(self, p2):
+        '''
+        SGBM 클래스의 P2 패러미터를 설정하는 메서드
+        '''
         assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has P2 parameter!'
         self.left_matcher.setP2(p2)
 
     def set_mode(self, mode):
+        '''
+        SGBM 클래스의 Mode 패러미터를 설정하는 메서드
+        '''
         assert self.stereo_type == STEREO_TYPE_SGBM, 'Only SGBM has Matching Mode Parameter!'
         self.left_matcher.setMode(mode)
 
