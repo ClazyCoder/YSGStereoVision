@@ -43,7 +43,7 @@ def main():
         # 두 카메라로 부터 영상 받아오기
         leftImg, rightImg = stereoCam.get_frame()
         
-        # Rectify 결과 행렬로 영상 재매핑(정렬)
+        # Rectify 결과 행렬로 영상 재매핑(Rectify)
         left_rectified = cv.remap(leftImg, leftMapX, leftMapY, cv.INTER_CUBIC, cv.BORDER_CONSTANT)
         right_rectified = cv.remap(rightImg, rightMapX, rightMapY, cv.INTER_CUBIC, cv.BORDER_CONSTANT)
 
@@ -77,15 +77,15 @@ def main():
         cv.normalize(disparity_valid_filtered,disparity_valid_filtered,1.0,0,cv.NORM_MINMAX)
         
         # 결과 출력
-            # 원본 영상
+        ## 원본 영상
         cv.imshow('left',leftImg)
         cv.imshow('right',rightImg)
-            # Rectification 이후 영상
+        ## Rectification 이후 영상
         cv.imshow('rectified_left',left_rectified)
         cv.imshow('rectified_right',right_rectified)
         #cv.imshow('rectified_left_valid',left_valid_rectified)
         #cv.imshow('rectified_right_valid',right_valid_rectified)
-            # 계산된 disparity와 filtering을 거친 disparity
+        ## 계산된 disparity와 filtering을 거친 disparity
         cv.imshow('disparity',disparity_valid)
         cv.imshow('filteredDisparity',disparity_valid_filtered)
 
