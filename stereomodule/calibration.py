@@ -6,7 +6,11 @@ import glob
 import os
 
 class Calibrator:
-
+    '''
+    Calibrator클래스.\n 
+    패턴을 캡쳐한 영상위의 좌표와 실제 패턴의 월드 좌표를 사용하여 캘리브레이션을 수행하고,\n
+    카메라 메트릭스를 얻어내는 클래스
+    '''
     def __init__(self, img_size):
         self.img_size = img_size[::-1]
         self.obj_datas = []

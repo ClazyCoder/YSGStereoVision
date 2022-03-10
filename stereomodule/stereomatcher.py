@@ -5,7 +5,10 @@ STEREO_TYPE_BM = int(0)
 STEREO_TYPE_SGBM = int(1)
 
 class StereoMatcher:
-    
+    '''
+    StereoMatcher 클래스.\n
+    정렬된(Rectified) 두 영상을 입력받아 Stereo Matching을 수행한다.
+    '''
     def __init__(self, stereo_type,num_disparities, block_size):
         if stereo_type == STEREO_TYPE_BM:
             self.stereo_type = STEREO_TYPE_BM
