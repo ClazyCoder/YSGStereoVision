@@ -6,8 +6,26 @@ STEREO_TYPE_SGBM = int(1)
 
 class StereoMatcher:
     '''
-    StereoMatcher 클래스.\n
+    # StereoMatcher 클래스
     정렬된(Rectified) 두 영상을 입력받아 Stereo Matching을 수행한다.
+    
+    ## init parameters:
+    - stereo_type
+    - num_disparities
+    - block_size
+
+    ### stereo_type
+    Block Matching 방법을 결정하는 패러미터.\n
+    stereomatcher.STEREO_TYPE_BM : 일반적인 BM 모델.\n
+    stereomatcher.STEREO_TYPE_SGBM : Semi-Global Block Matching 모델.
+
+    ### num_disparities
+    Block Matching시 검출할 Disparity의 단계를 결정하는 패러미터. 16의 배수여야 함.\n
+    16의 배수인 정수 값.
+
+    ### block_size
+    Block Matching시 Block의 크기를 결정하는 패러미터\n
+    홀수인 정수 값.
     '''
     def __init__(self, stereo_type,num_disparities, block_size):
         if stereo_type == STEREO_TYPE_BM:
