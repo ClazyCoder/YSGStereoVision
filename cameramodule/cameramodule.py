@@ -1,10 +1,18 @@
 import cv2 as cv
 
 class StereoCamera:
+    '''
+    # StereoCamera 클래스
+    스테레오 카메라 클래스.\n
+    두 대의 카메라를 관리하고 영상을 받아온다.
+
+    ## Init Parameters:
+    - img_size
+
+    ### img_size
+    카메라의 해상도를 결정하는 패러미터 (WIDTH, HEIGHT)
+    '''
     def __init__(self,img_size):
-        '''
-        스테레오 카메라 클래스.
-        '''
         self.left_camera = cv.VideoCapture(0, cv.CAP_DSHOW)
         self.left_camera.set(cv.CAP_PROP_AUTOFOCUS, 0)
         self.left_camera.set(cv.CAP_PROP_AUTO_EXPOSURE,0)

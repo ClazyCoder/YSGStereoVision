@@ -9,7 +9,7 @@ class StereoMatcher:
     # StereoMatcher 클래스
     정렬된(Rectified) 두 영상을 입력받아 Stereo Matching을 수행한다.
     
-    ## init parameters:
+    ## Init Parameters:
     - stereo_type
     - num_disparities
     - block_size
