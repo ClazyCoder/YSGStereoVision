@@ -171,7 +171,7 @@ class Calibrator:
                 "T" : self.T.tolist(),
                 "E" : self.E.tolist(),
                 "F" : self.F.tolist(),
-                "imgSize" : self.imgSize[::-1] 
+                "imgSize" : self.img_size[::-1] 
             }
         )
         with open(directory+'/'+filename, 'w') as f:
