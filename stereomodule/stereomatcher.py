@@ -42,25 +42,54 @@ class StereoMatcher:
     
     def set_min_disparity(self, min_disparity):
         '''
+        #set_min_disparity
         BM과 SGBM 클래스의 MinDisparity 패러미터를 설정하는 메서드
+        
+        ## Parameters
+        - min_disparity
+
+        ### min_disparity
+        Matching시 최소 disparity의 기준값
         '''
         self.left_matcher.setMinDisparity(min_disparity)
 
     def set_num_disparities(self, num_disparities):
         '''
+        # set_num_disparities
         BM과 SGBM 클래스의 NumDisparities 패러미터를 설정하는 메서드
+
+        ## Parameters
+        - num_disparities
+
+        ### num_disparities
+        Matching시 Disparity의 탐색 범위. (16의 배수여야 함, MaxDisparity - MinDisparity값.)
         '''
         self.left_matcher.setNumDisparities(num_disparities)
 
     def set_block_size(self, block_size):
         '''
+        # set_block_size
         BM과 SGBM 클래스의 BlockSize 패러미터를 설정하는 메서드
+
+        ## Parameters
+        - block_size
+
+        ### block_size
+        Matching시의 비교할 Block의 크기.
         '''
         self.left_matcher.setBlockSize(block_size)
 
     def set_pre_filter_cap(self, pre_filter_cap):
         '''
+        # set_pre_filter_cap
         BM과 SGBM 클래스의 PreFilterCap 패러미터를 설정하는 메서드
+
+        ## Parameters
+        - pre_filter_cap
+
+        ### pre_filter_cap
+        사전 필터링 이후 절단값. x축 기준으로 영상의 미분값을 계산하고,\n
+        [-preFilterCap, preFilterCap]간격으로 값을 자른다.
         '''
         self.left_matcher.setPreFilterCap(pre_filter_cap)
 
