@@ -40,7 +40,14 @@ class Calibrator:
 
     def load_datas(self, path='./datas'):
         '''
+        # load_datas
         지정된 path로 부터 패턴 데이터를 불러오는 메서드
+
+        ## Parameters
+        - path
+
+        ### path
+        데이터가 존재하는 경로
         '''
         left_data_glob = glob.glob(path+'/data_left*.json')
         right_data_glob = glob.glob(path+'/data_right*.json')
@@ -67,7 +74,14 @@ class Calibrator:
 
     def load_ChArUco_datas(self, path='./ChAruco_datas'):
         '''
+        # load_ChArUco_datas
         지정된 path로 부터 ChArUco 패턴 데이터를 불러오는 메서드
+
+        ## Parameters
+        - path
+
+        ### path
+        데이터가 존재하는 경로
         '''
         left_data_glob = glob.glob(path+'/data_left*.json')
         right_data_glob = glob.glob(path+'/data_right*.json')
@@ -95,7 +109,11 @@ class Calibrator:
 
     def run_calibration(self):
         '''
+        # run_calibration
         스테레오 캘리브레이션을 수행하고 결과를 필드에 저장하는 메서드
+
+        ## Parameters
+        None
         '''
         _, mtx1, dist1, rvecs1, tvecs1 =cv.calibrateCamera(self.obj_datas, self.left_datas, self.img_size, None, None)
         _, mtx2, dist2, rvecs2, tvecs2 =cv.calibrateCamera(self.obj_datas, self.right_datas, self.img_size, None, None)
@@ -156,7 +174,14 @@ class Calibrator:
 
     def save_calibration_datas(self, directory='./calib'):
         '''
+        # save_calibration_datas
         얻어낸 스테레오 카메라 패러미터를 path에 JSON형식으로 저장하는 메서드
+        
+        ## Parameters
+        - directory
+
+        ### directory
+        캘리브레이션 데이터가 저장될 경로
         '''
         if not os.path.isdir(directory):
             os.mkdir(directory)
@@ -179,7 +204,14 @@ class Calibrator:
     
     def load_calibration_datas(self, filename='./calib/calib_data.json'):
         '''
+        # load_calibration_datas
         저장된 JSON형식의 카메라 패러미터를 불러오는 메서드
+
+        ## Parameters
+        - filename
+
+        ### filename
+        저장된 카메라 패러미터 파일의 이름
         '''
         with open(filename,'r') as f:
             fstr = f.read()
@@ -194,6 +226,10 @@ class Calibrator:
         self.is_calibrated = True
 
 def main():
+    '''
+    파일 실행시 자동으로 (640,480) 크기의 패턴 사진들을 불러와 캘리브레이션 수행 후, 
+    "./calib" 폴더에 저장.
+    '''
     calibrator = Calibrator((640,480))
     calibrator.load_datas('./datas')
     calibrator.run_calibration()
