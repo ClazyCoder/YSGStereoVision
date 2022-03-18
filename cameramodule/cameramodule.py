@@ -29,7 +29,11 @@ class StereoCamera:
         
     def get_frame(self):
         '''
+        # get_frame
         두 카메라로 부터 얻은 영상을 반환하는 메서드
+        
+        ## Parameters
+        None
         '''
         if not (self.left_camera.grab()and self.right_camera.grab()):
             print("No more frames")
@@ -40,7 +44,11 @@ class StereoCamera:
         
     def get_frame_with_ret(self):
         '''
+        # get_frame_with_ret
         get_frame 메서드에서 retrieve 값을 추가적으로 반환하는 메서드
+
+        ## Parameters
+        None
         '''
         if not (self.left_camera.grab()and self.right_camera.grab()):
             print("No more frames")
