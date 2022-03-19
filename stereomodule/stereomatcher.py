@@ -95,20 +95,34 @@ class StereoMatcher:
 
     def set_pre_filter_size(self, pre_filter_size):
         '''
+        # set_pre_filter_size
         BM 클래스의 PreFilterSize 패러미터를 설정하는 메서드
+
+        ## Parameters
+        - pre_filter_size
+
+        ### pre_filter_size
+        사전 필터링시 필터의 크기
         '''
         assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has PreFilterSize parameter!'
         self.left_matcher.setPreFilterSize(pre_filter_size)
 
     def set_pre_filter_type(self, pre_filter_type):
         '''
+        # set_pre_filter_type
         BM 클래스의 PreFilterType 패러미터를 설정하는 메서드
+
+        ## Parameters
+        - pre_filter_type
+
+        ### pre_filter_type
+        사전 필터링의 종류
         '''
         assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has PreFilterType parameter!'
         self.left_matcher.setPreFilterType(pre_filter_type)
 
     def set_uniqueness_ratio(self, uniqueness_ratio):
-        '''
+        ''''''
         BM과 SGBM 클래스의 UniquenessRatio 패러미터를 설정하는 메서드
         '''
         self.left_matcher.setUniquenessRatio(uniqueness_ratio)
