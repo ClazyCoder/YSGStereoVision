@@ -122,7 +122,7 @@ class StereoMatcher:
         self.left_matcher.setPreFilterType(pre_filter_type)
 
     def set_uniqueness_ratio(self, uniqueness_ratio):
-        ''''''
+        '''
         BM과 SGBM 클래스의 UniquenessRatio 패러미터를 설정하는 메서드
         '''
         self.left_matcher.setUniquenessRatio(uniqueness_ratio)
