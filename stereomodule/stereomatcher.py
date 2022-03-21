@@ -182,7 +182,18 @@ class StereoMatcher:
 
     def get_disparity(self, rectified_left, rectified_right):
         '''
+        # get_disparity
         Disparity를 계산하여 반환하는 메서드
+
+        ## Parameters
+        - rectified_left
+        - rectified_right
+
+        ### rectified_left
+        rectification이 끝난 왼쪽 이미지
+
+        ### rectified_right
+        rectification이 끝난 오른쪽 이미지
         '''
         disparity = self.left_matcher.compute(rectified_left, rectified_right)
         res = disparity.astype(np.float32) / 16.0
