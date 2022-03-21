@@ -21,7 +21,7 @@ end_header
 
 def main():
     NUM_DISPARITY = 112
-    BLOCKSIZE = 15
+    BLOCKSIZE = 21
 
     #초기 클래스 인스턴스들 생성
     stereoCam = cm.StereoCamera(IMGSIZE)
