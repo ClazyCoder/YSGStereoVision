@@ -263,21 +263,50 @@ class StereoMatcher:
 
     def create_wls_filter(self):
         '''
+        # create_wls_filter
         WlsFilter 객체를 생성하는 메서드
+
+        ## Parameters
+        None
         '''
         self.right_matcher = cv.ximgproc.createRightMatcher(self.left_matcher)
         self.wls_filter = cv.ximgproc.createDisparityWLSFilter(matcher_left=self.left_matcher)
 
     def set_wls_filter_parameters(self, lmbda, sigma):
         '''
+        # set_wls_filter_parameters
         WlsFilter의 패러미터를 변경하는 메서드
+
+        ## Parameters
+        - lmbda
+        - sigma
+
+        ### lmbda [참조](https://docs.opencv.org/3.4/d9/d51/classcv_1_1ximgproc_1_1DisparityWLSFilter.html#ab26fa73918b84d1a0e57951e00704708 "OpenCVDocs")
+        필터링 중에 정규화의 양을 결정하는 패러미터.\n 
+        값이 클수록 필터링 결과인 disparity맵의 edge들이 소스 영상의 edge에 가깝도록 조정함.
+
+        ### sigma [참조](https://docs.opencv.org/3.4/d9/d51/classcv_1_1ximgproc_1_1DisparityWLSFilter.html#a40be4d8d3ec7b9018b37a18a6d7ccecb "OpenCVDocs")
+        필터링 과정이 원본 영ㅇ상의 edge에 얼마나 민감한지를 결정하는 패러미터.\n 
+        큰 값이면 낮은 대비를 가지는 edge들에 대한 disparity 유실이 생길 수 있고,\n 
+        작은 값이면 필터가 소스 영상의 노이즈 및 텍스처에 너무 민감해질 수 있다.
         '''
         self.wls_filter.setLambda(lmbda)
         self.wls_filter.setSigmaColor(sigma)
 
     def get_filtered_disparity(self, rectified_left, rectified_right):
         '''
+        # get_filtered_disparity
         WlsFilter를 적용한 Disparity를 반환하는 메서드
+
+        ## Parameters
+        - rectified_left
+        - rectified_right
+
+        ### rectified_left
+        Rectification이 적용된 왼쪽 영상
+
+        ### rectified_right
+        Rectification이 적용된 오른쪽 영상
         '''
         disp_left = self.left_matcher.compute(rectified_left, rectified_right)
         disp_right = self.right_matcher.compute(rectified_right,rectified_left)
