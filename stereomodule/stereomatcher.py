@@ -88,8 +88,7 @@ class StereoMatcher:
         - pre_filter_cap
 
         ### pre_filter_cap
-        사전 필터링 이후 절단값. x축 기준으로 영상의 미분값을 계산하고,\n
-        [-preFilterCap, preFilterCap]간격으로 값을 자른다.
+        사전 필터링 이후 절단값. 사전필터링 이후에 [-preFilterCap, preFilterCap]간격으로 값을 자른다.
         '''
         self.left_matcher.setPreFilterCap(pre_filter_cap)
 
@@ -116,7 +115,14 @@ class StereoMatcher:
         - pre_filter_type
 
         ### pre_filter_type
-        사전 필터링의 종류
+        사전 필터링의 종류를 결정하는 패러미터.\n
+        종류는 다음과 같다.
+
+        - cv2.StereoBM_PREFILTER_NORMALIZED_RESPONSE
+        - cv2.StereoBM_PREFILTER_XSOBEL
+
+        NORMALIZED_RESPONSE : 영상의 명암값만 정규화 한다.\n
+        XSOBEL : 영상을 x축 방향으로 Sobel 1차 미분한다.\n
         '''
         assert self.stereo_type == STEREO_TYPE_BM, 'Only BM has PreFilterType parameter!'
         self.left_matcher.setPreFilterType(pre_filter_type)
