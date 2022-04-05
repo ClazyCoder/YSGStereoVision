@@ -102,7 +102,7 @@ def main():
             point_colors = point_colors[mask]
             depth_points = np.nan_to_num(depth_points,posinf=0,neginf=0)
 
-            # 저장 형식은 점의 위치와 색상 값 (x, y, z, R, G, B)
+            # 저장 형식은 점의 위치와 색상 값 (x, y, z, R, G, B)의 .ply파일
             verts = depth_points.reshape(-1, 3)
             point_colors = point_colors.reshape(-1, 3)
             verts = np.hstack([verts, point_colors])
