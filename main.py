@@ -20,7 +20,7 @@ end_header
 '''
 
 def main():
-    NUM_DISPARITY = 112
+    NUM_DISPARITY = 48
     BLOCKSIZE = 21
 
     #초기 클래스 인스턴스들 생성
